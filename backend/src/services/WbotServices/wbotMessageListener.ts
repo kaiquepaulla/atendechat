@@ -1918,9 +1918,10 @@ const flowbuilderIntegration = async (
       flowIdWelcomeSetting?.value &&
       (Date.now() - new Date(ticket.createdAt).getTime()) < 30000 // Ticket created less than 30 seconds ago
     ) {
+      const flowIdWelcome = parseInt(String(flowIdWelcomeSetting?.value ?? ""), 10);
       const flow = await FlowBuilderModel.findOne({
         where: {
-          id: flowIdWelcomeSetting.value,
+          id: flowIdWelcome,
           company_id: ticket.companyId
         }
       });
@@ -1936,7 +1937,7 @@ const flowbuilderIntegration = async (
 
         await ActionsWebhookService(
           whatsapp.id,
-          flowIdWelcomeSetting.value,
+          flowIdWelcome,
           ticket.companyId,
           nodes,
           connections,
@@ -2313,9 +2314,10 @@ const handleMessage = async (
         }
       });
       if (enableWelcomeFlow?.value === "enabled" && flowIdWelcomeSetting?.value) {
+      const flowIdWelcome = parseInt(String(flowIdWelcomeSetting?.value ?? ""), 10);
         const flow = await FlowBuilderModel.findOne({
           where: {
-            id: flowIdWelcomeSetting.value,
+            id: flowIdWelcome,
             company_id: companyId
           }
         });
@@ -2330,7 +2332,7 @@ const handleMessage = async (
           try {
             await ActionsWebhookService(
               whatsapp.id,
-              flowIdWelcomeSetting.value,
+              flowIdWelcome,
               companyId,
               nodes,
               connections,
